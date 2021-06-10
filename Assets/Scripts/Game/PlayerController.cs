@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     private float slowdownAngle = 0;
     private float desiredTimeScale;
     private float slowdownCameraAngle = -1;
+    private String fuelWarningText = "Orbit";
 
     private GameObject[] planets;
     private GameObject[] asteroids;
@@ -109,9 +110,9 @@ public class PlayerController : MonoBehaviour
         {
             adNo.transform.GetChild(0).gameObject.GetComponent<UnityEngine.UI.Text>().text = "NIE";
             adYesGO.transform.GetChild(0).gameObject.GetComponent<UnityEngine.UI.Text>().text = "TAK";
-            netInfo.GetComponent<UnityEngine.UI.Text>().text = "brak polaczenia z internetem!";
-            fuelWarning.GetComponent<UnityEngine.UI.Text>().text = "Orbituj!";
-            adMess.text = "Wyswietl reklame aby kontynuowac";
+            netInfo.GetComponent<UnityEngine.UI.Text>().text = "Brak internetu!";
+            adMess.text = "Wyświetl reklamę";
+            //fuelWarningText = "Orbituj";
         }
 
         fuelEffect.SetActive(false);
@@ -178,6 +179,7 @@ public class PlayerController : MonoBehaviour
         {
             usedFuel += Time.deltaTime * 5;
             fuelWarning.SetActive(true);
+            scoreText.text = fuelWarningText;
 
             //animation checking
             if (!hsAnimStarted)
@@ -187,7 +189,7 @@ public class PlayerController : MonoBehaviour
                 {
                     fuelImage.rectTransform.sizeDelta += new Vector2(10, 10) * Time.deltaTime;
                 }
-                if (cockpitImageRect.anchoredPosition.y < -10)
+                if (cockpitImageRect.anchoredPosition.y < 15)
                 {
                     cockpitImageRect.anchoredPosition += new Vector2(0, 10 * Time.deltaTime);
                 }
@@ -197,7 +199,7 @@ public class PlayerController : MonoBehaviour
         {
             fuelImage.rectTransform.sizeDelta -= new Vector2(10, 10) * Time.deltaTime;
         }
-        else if (cockpitImageRect.anchoredPosition.y > -25 && !hsAnimStarted)
+        else if (cockpitImageRect.anchoredPosition.y > 0 && !hsAnimStarted)
         {
             cockpitImageRect.anchoredPosition -= new Vector2(0, 10 * Time.deltaTime);
         }
@@ -231,7 +233,12 @@ public class PlayerController : MonoBehaviour
                 score = desiredScore;
             }
         }
-        scoreText.text = Convert.ToInt32(score).ToString();
+
+        if (!fuelWarning.activeSelf)
+        {
+            scoreText.text = Convert.ToInt32(score).ToString();
+        }
+
         //slowdown angle is reducing with score
         slowdownAngle = score * -0.0214f + 34.29f;
         if (slowdownAngle > 30)
@@ -268,7 +275,7 @@ public class PlayerController : MonoBehaviour
             hsAnimStarted = true;
             if (!cockpitUp)
             {
-                if (cockpitImageRect.anchoredPosition.y < -10)
+                if (cockpitImageRect.anchoredPosition.y < 15)
                 {
                     cockpitImageRect.anchoredPosition += new Vector2(0, 30 * Time.deltaTime);
 
@@ -305,7 +312,7 @@ public class PlayerController : MonoBehaviour
 
             if (!cockpitDown && cockpitUp && textUp && textDown)
             {
-                if (cockpitImageRect.anchoredPosition.y > -25)
+                if (cockpitImageRect.anchoredPosition.y > 0)
                 {
                     cockpitImageRect.anchoredPosition -= new Vector2(0, 30 * Time.deltaTime);
 
