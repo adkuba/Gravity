@@ -17,7 +17,7 @@ public class ObjectsGenerator : MonoBehaviour
     private Vector2 screenBounds;
 
     public GameObject planetPrefab;
-    public GameObject asteroidPrefab;
+    public GameObject[] asteroidPrefabs;
     public GameObject sunPrefab;
 
     private GameObject[] planets;
@@ -241,7 +241,8 @@ public class ObjectsGenerator : MonoBehaviour
     {
         if (checkObjectsNumber(asteroids, maxAsteroids))
         {
-            GameObject asteroid = Instantiate(asteroidPrefab) as GameObject;
+            int randomIndex = UnityEngine.Random.Range(0, asteroidPrefabs.Length);
+            GameObject asteroid = Instantiate(asteroidPrefabs[randomIndex]) as GameObject;
 
             Vector2 xrange = new Vector2(minx, maxx);
             Vector2 yrange = new Vector2(miny, maxy);
