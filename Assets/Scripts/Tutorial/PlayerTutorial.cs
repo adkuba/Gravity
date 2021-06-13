@@ -30,6 +30,7 @@ public class PlayerTutorial : MonoBehaviour
     private float desiredTimeScale;
     private float slowdownCameraAngle = -1;
     private int addScore = 0;
+    private String fuelWarningText = "Orbit";
     
     private bool leftTut = false;
     private bool rightTut = false;
@@ -39,6 +40,7 @@ public class PlayerTutorial : MonoBehaviour
     private GameObject[] asteroids;
     private GameObject scoreGameObject;
     private GameObject fuelGameObject;
+    private GameObject fuelWarning;
     private GameObject boostGameObject;
     private GameObject spawn;
     private GameObject boostAdd;
@@ -61,7 +63,7 @@ public class PlayerTutorial : MonoBehaviour
     private string leftTutText = "Click left side of the device";
     private string rightTutText = "Click right side";
     private string boostTutText = "Click both to activate boost\nLeft circle must be full and not transparent";
-    private string fuelTutText = "No orbiting = more fuel used\nGo after the pointer!";
+    private string fuelTutText = "No orbiting - more fuel used\nGo after the pointer!";
     private string orbitTutText = "Some planets have fuel\nFly as far as possible";
     private string finalTutText = "Great that's it!";
 
@@ -79,6 +81,7 @@ public class PlayerTutorial : MonoBehaviour
         engine = GameObject.FindGameObjectWithTag("Engine");
         fuelEffect = GameObject.FindGameObjectWithTag("FuelEffect");
         boostAdd = GameObject.FindGameObjectWithTag("BoostAdd");
+        fuelWarning = GameObject.FindGameObjectWithTag("FuelWarning");
         infoTextGO = GameObject.FindGameObjectWithTag("InfoText");
         quit = GameObject.FindGameObjectWithTag("Quit");
 
@@ -106,19 +109,21 @@ public class PlayerTutorial : MonoBehaviour
         fromLastBoost = Time.time;
         timeFromSpawn = Time.time;
         boostAdd.SetActive(false);
+        fuelWarning.SetActive(false);
         timeFromLastPlanet = Time.time;
         screenBounds = new Vector2(Camera.main.aspect * Camera.main.orthographicSize, Camera.main.orthographicSize);
 
         //zmiana jezyka
         if (Application.systemLanguage == SystemLanguage.Polish)
         {
-            quit.transform.GetChild(0).gameObject.GetComponent<UnityEngine.UI.Text>().text = "Wyjdz";
-            leftTutText = "Kliknij lewa strone urzadzenia";
-            rightTutText = "Kliknij prawa strone";
-            boostTutText = "Kliknij obydwie aby aktywowac boost\nLewe kolo musi byc pelne i aktywne";
-            fuelTutText = "Brak orbitowania = wiecej zuzytego paliwa\nLec za wskaznikiem!";
-            orbitTutText = "Niektore planety maja paliwo\nDolec jak najdalej potrafisz";
+            quit.transform.GetChild(0).gameObject.GetComponent<UnityEngine.UI.Text>().text = "Wyjdź";
+            leftTutText = "Kliknij lewą stronę urządzenia";
+            rightTutText = "Kliknij prawą stronę";
+            boostTutText = "Kliknij obydwie aby aktywować boost\nLewe koło musi być pełne i aktywne";
+            fuelTutText = "Brak orbitowania to więcej zużytego paliwa\nLeć za wskaźnikiem!";
+            orbitTutText = "Niektóre planety mają paliwo\nDoleć jak najdalej potrafisz";
             finalTutText = "Super to wszystko!";
+            //fuelWarningText = "Orbituj";
         }
     }
 
@@ -263,13 +268,14 @@ public class PlayerTutorial : MonoBehaviour
         //more fuel when not orbiting
         if (Time.time - timeFromLastPlanet > 10 && !exiting && boostTut)
         {
+            fuelWarning.SetActive(true);
             usedFuel += Time.deltaTime * 5;
 
             if (fuelImage.rectTransform.sizeDelta.x < 70)
             {
                 fuelImage.rectTransform.sizeDelta += new Vector2(10, 10) * Time.deltaTime;
             }
-            if (cockpitImageRect.anchoredPosition.y < -10)
+            if (cockpitImageRect.anchoredPosition.y < 10)
             {
                 cockpitImageRect.anchoredPosition += new Vector2(0, 10 * Time.deltaTime);
             }
@@ -279,9 +285,15 @@ public class PlayerTutorial : MonoBehaviour
         {
             fuelImage.rectTransform.sizeDelta -= new Vector2(10, 10) * Time.deltaTime;
         }
-        else if (cockpitImageRect.anchoredPosition.y > -25)
+        else if (cockpitImageRect.anchoredPosition.y > -15)
         {
             cockpitImageRect.anchoredPosition -= new Vector2(0, 10 * Time.deltaTime);
+        }
+
+        //warning remove
+        if (Time.time - timeFromLastPlanet < 10 || exiting)
+        {
+            fuelWarning.SetActive(false);
         }
 
         //score, boost, fuel cockpit

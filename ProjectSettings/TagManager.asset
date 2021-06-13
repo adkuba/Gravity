@@ -44,6 +44,10 @@ TagManager:
   - AdYes
   - TutorialMess
   - Quit
+  - TutorialInfoText
+  - TapGroup
+  - ScoreImage
+  - AdMessage
   layers:
   - Default
   - TransparentFX

@@ -55,6 +55,7 @@ public class PlayerController : MonoBehaviour
     private GameObject adNo;
     private GameObject shell;
     private GameObject engine;
+    private GameObject adMessage;
     private GameObject fuelEffect;
     private GameObject adMessGO;
     private GameObject adYesGO;
@@ -77,6 +78,7 @@ public class PlayerController : MonoBehaviour
         spawn = GameObject.FindGameObjectWithTag("Spawn");
         cockpitImage = GameObject.FindGameObjectWithTag("Cockpit");
         fuelGameObject = GameObject.FindGameObjectWithTag("Fuel");
+        adMessage = GameObject.FindGameObjectWithTag("AdMessage");
         boostGameObject = GameObject.FindGameObjectWithTag("Boost");
         adManager = GameObject.FindGameObjectWithTag("AdManager");
         fuelWarning = GameObject.FindGameObjectWithTag("FuelWarning");
@@ -111,6 +113,7 @@ public class PlayerController : MonoBehaviour
             adNo.transform.GetChild(0).gameObject.GetComponent<UnityEngine.UI.Text>().text = "NIE";
             adYesGO.transform.GetChild(0).gameObject.GetComponent<UnityEngine.UI.Text>().text = "TAK";
             netInfo.GetComponent<UnityEngine.UI.Text>().text = "Brak internetu!";
+            adMessage.GetComponent<UnityEngine.UI.Text>().text = "Kliknij tak aby obejrzeć reklamę i kontynuować grę.";
             adMess.text = "Wyświetl reklamę";
             //fuelWarningText = "Orbituj";
         }
@@ -189,7 +192,7 @@ public class PlayerController : MonoBehaviour
                 {
                     fuelImage.rectTransform.sizeDelta += new Vector2(10, 10) * Time.deltaTime;
                 }
-                if (cockpitImageRect.anchoredPosition.y < 15)
+                if (cockpitImageRect.anchoredPosition.y < 10)
                 {
                     cockpitImageRect.anchoredPosition += new Vector2(0, 10 * Time.deltaTime);
                 }
@@ -199,7 +202,7 @@ public class PlayerController : MonoBehaviour
         {
             fuelImage.rectTransform.sizeDelta -= new Vector2(10, 10) * Time.deltaTime;
         }
-        else if (cockpitImageRect.anchoredPosition.y > 0 && !hsAnimStarted)
+        else if (cockpitImageRect.anchoredPosition.y > -15 && !hsAnimStarted)
         {
             cockpitImageRect.anchoredPosition -= new Vector2(0, 10 * Time.deltaTime);
         }
@@ -275,7 +278,7 @@ public class PlayerController : MonoBehaviour
             hsAnimStarted = true;
             if (!cockpitUp)
             {
-                if (cockpitImageRect.anchoredPosition.y < 15)
+                if (cockpitImageRect.anchoredPosition.y < 10)
                 {
                     cockpitImageRect.anchoredPosition += new Vector2(0, 30 * Time.deltaTime);
 
@@ -312,7 +315,7 @@ public class PlayerController : MonoBehaviour
 
             if (!cockpitDown && cockpitUp && textUp && textDown)
             {
-                if (cockpitImageRect.anchoredPosition.y > 0)
+                if (cockpitImageRect.anchoredPosition.y > -15)
                 {
                     cockpitImageRect.anchoredPosition -= new Vector2(0, 30 * Time.deltaTime);
 
@@ -407,9 +410,10 @@ public class PlayerController : MonoBehaviour
 
 
         //steering, deltaTime is important!
-        if (usedFuel < fuelTank && Time.time - timeFromSpawn > 1)  //&& Input.touchCount > 0
+        if (usedFuel < fuelTank && Time.time - timeFromSpawn > 1 && Input.touchCount > 0)
         {
-            /*Touch touch = Input.GetTouch(0);
+            /*
+            Touch touch = Input.GetTouch(0);
             Vector2 pos = touch.position;
 
             if (Input.touchCount > 1)
@@ -442,7 +446,9 @@ public class PlayerController : MonoBehaviour
             {
                 targetForceSteer += new Vector3(-90 * Time.deltaTime - steerAddition, 0, 0); 
                 shell.transform.Rotate(new Vector3(0, 1, 0) * 90 * Time.deltaTime);
-            } */
+            }
+            */
+            
             if (Input.GetKey(KeyCode.RightArrow)){
                 targetForceSteer += new Vector3(90 * Time.deltaTime + steerAddition, 0, 0);
                 shell.transform.Rotate(new Vector3(0, -1, 0) * 90 * Time.deltaTime);
