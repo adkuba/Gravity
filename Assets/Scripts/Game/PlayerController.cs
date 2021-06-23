@@ -188,7 +188,7 @@ public class PlayerController : MonoBehaviour
             if (!hsAnimStarted)
             {
                 fuelAnim = true;
-                if (fuelImage.rectTransform.sizeDelta.x < 70)
+                if (fuelImage.rectTransform.sizeDelta.x < 60)
                 {
                     fuelImage.rectTransform.sizeDelta += new Vector2(10, 10) * Time.deltaTime;
                 }
@@ -290,7 +290,7 @@ public class PlayerController : MonoBehaviour
 
             if (!textUp && cockpitUp)
             {
-                if (scoreText.fontSize < 50)
+                if (scoreText.fontSize < 45)
                 {
                     scoreText.fontSize += 1;
                     waitAnimation = Time.time;
@@ -303,7 +303,7 @@ public class PlayerController : MonoBehaviour
 
             if (!textDown && cockpitUp && textUp && Time.time - waitAnimation > 1)
             {
-                if (scoreText.fontSize > 45)
+                if (scoreText.fontSize > 40)
                 {
                    scoreText.fontSize -= 1;
 
@@ -410,7 +410,7 @@ public class PlayerController : MonoBehaviour
 
 
         //steering, deltaTime is important!
-        if (usedFuel < fuelTank && Time.time - timeFromSpawn > 1 && Input.touchCount > 0)
+        if (usedFuel < fuelTank && Time.time - timeFromSpawn > 1) //&& Input.touchCount > 0
         {
             /*
             Touch touch = Input.GetTouch(0);
