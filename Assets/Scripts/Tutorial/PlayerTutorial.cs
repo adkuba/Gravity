@@ -44,14 +44,16 @@ public class PlayerTutorial : MonoBehaviour
     private GameObject boostGameObject;
     private GameObject spawn;
     private GameObject boostAdd;
-    private GameObject cockpitImage;
+    private GameObject boostTextG0;
+    private GameObject fuelTextGO;
     private GameObject shell;
     private GameObject engine;
     private GameObject fuelEffect;
     private Rigidbody rb;
-    private RectTransform cockpitImageRect;
     private UnityEngine.UI.Image fuelImage;
     private UnityEngine.UI.Image boostImage;
+    private UnityEngine.UI.Text boostText;
+    private UnityEngine.UI.Text fuelText;
     private UnityEngine.UI.Text scoreText;
     private UnityEngine.UI.Text boostAddText;
     private AudioSource crashSound;
@@ -74,8 +76,9 @@ public class PlayerTutorial : MonoBehaviour
     {
         scoreGameObject = GameObject.FindGameObjectWithTag("Score");
         shell = GameObject.FindGameObjectWithTag("Shell");
+        boostTextG0 = GameObject.FindGameObjectWithTag("BoostText");
+        fuelTextGO = GameObject.FindGameObjectWithTag("FuelText");
         spawn = GameObject.FindGameObjectWithTag("Spawn");
-        cockpitImage = GameObject.FindGameObjectWithTag("Cockpit");
         fuelGameObject = GameObject.FindGameObjectWithTag("Fuel");
         boostGameObject = GameObject.FindGameObjectWithTag("Boost");
         engine = GameObject.FindGameObjectWithTag("Engine");
@@ -95,10 +98,11 @@ public class PlayerTutorial : MonoBehaviour
         desiredScale = new Vector3(0.28f, 0.94f, 0.16f);
 
         rb = GetComponent<Rigidbody>();
-        cockpitImageRect = cockpitImage.GetComponent<RectTransform>();
         fuelImage = fuelGameObject.GetComponent<UnityEngine.UI.Image>();
         boostImage = boostGameObject.GetComponent<UnityEngine.UI.Image>();
         scoreText = scoreGameObject.GetComponent<UnityEngine.UI.Text>();
+        boostText = boostTextG0.GetComponent<UnityEngine.UI.Text>();
+        fuelText = fuelTextGO.GetComponent<UnityEngine.UI.Text>();
         boostAddText = boostAdd.GetComponent<UnityEngine.UI.Text>();
         infoText = infoTextGO.GetComponent<UnityEngine.UI.Text>();
         quit.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(QuitButton);
@@ -123,7 +127,7 @@ public class PlayerTutorial : MonoBehaviour
             fuelTutText = "Brak orbitowania to więcej zużytego paliwa\nLeć za wskaźnikiem!";
             orbitTutText = "Niektóre planety mają paliwo\nDoleć jak najdalej potrafisz";
             finalTutText = "Super to wszystko!";
-            //fuelWarningText = "Orbituj";
+            fuelWarningText = "Orbituj";
         }
     }
 
@@ -270,34 +274,16 @@ public class PlayerTutorial : MonoBehaviour
         {
             fuelWarning.SetActive(true);
             usedFuel += Time.deltaTime * 5;
-
-            if (fuelImage.rectTransform.sizeDelta.x < 70)
-            {
-                fuelImage.rectTransform.sizeDelta += new Vector2(10, 10) * Time.deltaTime;
-            }
-            if (cockpitImageRect.anchoredPosition.y < 10)
-            {
-                cockpitImageRect.anchoredPosition += new Vector2(0, 10 * Time.deltaTime);
-            }
-
+            scoreText.text = fuelWarningText;
         }
-        else if (fuelImage.rectTransform.sizeDelta.x > 50)
-        {
-            fuelImage.rectTransform.sizeDelta -= new Vector2(10, 10) * Time.deltaTime;
-        }
-        else if (cockpitImageRect.anchoredPosition.y > -15)
-        {
-            cockpitImageRect.anchoredPosition -= new Vector2(0, 10 * Time.deltaTime);
-        }
-
-        //warning remove
-        if (Time.time - timeFromLastPlanet < 10 || exiting)
+        else
         {
             fuelWarning.SetActive(false);
         }
 
         //score, boost, fuel cockpit
         fuelImage.fillAmount = percent / 100;
+        fuelText.text = percent.ToString("F0") + "%";
         int desiredScore = Convert.ToInt32(Vector3.Distance(Vector3.zero, transform.position) * 0.4f) + addScore;
         if (score < desiredScore)
         {
@@ -321,10 +307,12 @@ public class PlayerTutorial : MonoBehaviour
         if (boostPassedTime < 7)
         {
             boostImage.fillAmount = boostPassedTime / 7;
+            boostText.text = (boostPassedTime * 100 / 7).ToString("F0") + "%";
         }
         else
         {
             boostImage.fillAmount = 1;
+            boostText.text = "100%";
         }
 
         //planet checking

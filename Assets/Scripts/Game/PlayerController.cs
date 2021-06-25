@@ -25,14 +25,10 @@ public class PlayerController : MonoBehaviour
     private int addScore = 0;
     private bool hsAnimationComp = false;
     private float waitAnimation = 0;
-    private bool cockpitUp = false;
     private bool textUp = false;
     private bool textDown = false;
-    private bool cockpitDown = false;
     private float timeFromLastPlanet;
     private bool endSeguenceInvoked = false;
-    private bool fuelAnim = false;
-    private bool hsAnimStarted = false;
     private int scoreBoost = 0;
     private float steerAddition = 0;
     private int closestAsteroid = -1;
@@ -50,7 +46,6 @@ public class PlayerController : MonoBehaviour
     private GameObject spawn;
     private GameObject boostAdd;
     private GameObject fuelWarning;
-    private GameObject cockpitImage;
     private GameObject adManager;
     private GameObject adNo;
     private GameObject shell;
@@ -59,14 +54,17 @@ public class PlayerController : MonoBehaviour
     private GameObject fuelEffect;
     private GameObject adMessGO;
     private GameObject adYesGO;
+    private GameObject boostTextG0;
+    private GameObject fuelTextGO;
     private GameObject netInfo;
     private UnityEngine.UI.Text adMess;
     private Rigidbody rb;
-    private RectTransform cockpitImageRect;
     private RectTransform adNoRect;
     private UnityEngine.UI.Image fuelImage;
     private UnityEngine.UI.Image boostImage;
     private UnityEngine.UI.Text scoreText;
+    private UnityEngine.UI.Text boostText;
+    private UnityEngine.UI.Text fuelText;
     private UnityEngine.UI.Text boostAddText;
     private AudioSource crashSound;
 
@@ -74,9 +72,10 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         scoreGameObject = GameObject.FindGameObjectWithTag("Score");
+        boostTextG0 = GameObject.FindGameObjectWithTag("BoostText");
+        fuelTextGO = GameObject.FindGameObjectWithTag("FuelText");
         shell = GameObject.FindGameObjectWithTag("Shell");
         spawn = GameObject.FindGameObjectWithTag("Spawn");
-        cockpitImage = GameObject.FindGameObjectWithTag("Cockpit");
         fuelGameObject = GameObject.FindGameObjectWithTag("Fuel");
         adMessage = GameObject.FindGameObjectWithTag("AdMessage");
         boostGameObject = GameObject.FindGameObjectWithTag("Boost");
@@ -100,10 +99,11 @@ public class PlayerController : MonoBehaviour
         desiredScale = new Vector3(0.28f, 0.94f, 0.16f);
 
         rb = GetComponent<Rigidbody>();
-        cockpitImageRect = cockpitImage.GetComponent<RectTransform>();
         fuelImage = fuelGameObject.GetComponent<UnityEngine.UI.Image>();
         boostImage = boostGameObject.GetComponent<UnityEngine.UI.Image>();
         scoreText = scoreGameObject.GetComponent<UnityEngine.UI.Text>();
+        boostText = boostTextG0.GetComponent<UnityEngine.UI.Text>();
+        fuelText = fuelTextGO.GetComponent<UnityEngine.UI.Text>();
         adMess = adMessGO.GetComponent<UnityEngine.UI.Text>();
         boostAddText = boostAdd.GetComponent<UnityEngine.UI.Text>();
 
@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour
             netInfo.GetComponent<UnityEngine.UI.Text>().text = "Brak internetu!";
             adMessage.GetComponent<UnityEngine.UI.Text>().text = "Kliknij tak aby obejrzeć reklamę i kontynuować grę.";
             adMess.text = "Wyświetl reklamę";
-            //fuelWarningText = "Orbituj";
+            fuelWarningText = "Orbituj";
         }
 
         fuelEffect.SetActive(false);
@@ -183,42 +183,15 @@ public class PlayerController : MonoBehaviour
             usedFuel += Time.deltaTime * 5;
             fuelWarning.SetActive(true);
             scoreText.text = fuelWarningText;
-
-            //animation checking
-            if (!hsAnimStarted)
-            {
-                fuelAnim = true;
-                if (fuelImage.rectTransform.sizeDelta.x < 60)
-                {
-                    fuelImage.rectTransform.sizeDelta += new Vector2(10, 10) * Time.deltaTime;
-                }
-                if (cockpitImageRect.anchoredPosition.y < 10)
-                {
-                    cockpitImageRect.anchoredPosition += new Vector2(0, 10 * Time.deltaTime);
-                }
-            }
-        }
-        else if (fuelImage.rectTransform.sizeDelta.x > 50 && !hsAnimStarted)
-        {
-            fuelImage.rectTransform.sizeDelta -= new Vector2(10, 10) * Time.deltaTime;
-        }
-        else if (cockpitImageRect.anchoredPosition.y > -15 && !hsAnimStarted)
-        {
-            cockpitImageRect.anchoredPosition -= new Vector2(0, 10 * Time.deltaTime);
         }
         else
-        {
-            fuelAnim = false;
-        }
-
-        //warning remove
-        if (Time.time - timeFromLastPlanet < 10 || exiting)
         {
             fuelWarning.SetActive(false);
         }
 
         //score, boost, fuel cockpit
         fuelImage.fillAmount = percent / 100;
+        fuelText.text = percent.ToString("F0") + "%";
         int desiredScore = Convert.ToInt32(Vector3.Distance(Vector3.zero, transform.position) * 0.4f) + addScore;
         if (score < desiredScore)
         {
@@ -266,29 +239,18 @@ public class PlayerController : MonoBehaviour
         if (boostPassedTime < 7)
         {
             boostImage.fillAmount = boostPassedTime / 7;
+            boostText.text = (boostPassedTime * 100 / 7).ToString("F0") + "%";
         }
         else
         {
             boostImage.fillAmount = 1;
+            boostText.text = "100%";
         }
 
         //highscore animation
-        if (score > highscore && !hsAnimationComp && !fuelAnim)
+        if (score > highscore && !hsAnimationComp && !fuelWarning.activeSelf)
         {
-            hsAnimStarted = true;
-            if (!cockpitUp)
-            {
-                if (cockpitImageRect.anchoredPosition.y < 10)
-                {
-                    cockpitImageRect.anchoredPosition += new Vector2(0, 30 * Time.deltaTime);
-
-                } else
-                {
-                    cockpitUp = true;
-                }
-            }
-
-            if (!textUp && cockpitUp)
+            if (!textUp)
             {
                 if (scoreText.fontSize < 45)
                 {
@@ -300,8 +262,7 @@ public class PlayerController : MonoBehaviour
                     textUp = true;
                 }
             }
-
-            if (!textDown && cockpitUp && textUp && Time.time - waitAnimation > 1)
+            if (!textDown && textUp && Time.time - waitAnimation > 1)
             {
                 if (scoreText.fontSize > 40)
                 {
@@ -312,23 +273,9 @@ public class PlayerController : MonoBehaviour
                     textDown = true;
                 }
             }
-
-            if (!cockpitDown && cockpitUp && textUp && textDown)
-            {
-                if (cockpitImageRect.anchoredPosition.y > -15)
-                {
-                    cockpitImageRect.anchoredPosition -= new Vector2(0, 30 * Time.deltaTime);
-
-                } else
-                {
-                    cockpitDown = true;
-                }
-            }
-
-            if (cockpitUp && textUp && textDown && cockpitDown)
+            if (textUp && textDown)
             {
                 hsAnimationComp = true;
-                hsAnimStarted = false;
             }
         }
 

@@ -48,6 +48,8 @@ TagManager:
   - TapGroup
   - ScoreImage
   - AdMessage
+  - BoostText
+  - FuelText
   layers:
   - Default
   - TransparentFX
