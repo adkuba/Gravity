@@ -395,14 +395,30 @@ public class PlayerController : MonoBehaviour
                 shell.transform.Rotate(new Vector3(0, 1, 0) * 90 * Time.deltaTime);
             }
             */
-            
             if (Input.GetKey(KeyCode.RightArrow)){
                 targetForceSteer += new Vector3(90 * Time.deltaTime + steerAddition, 0, 0);
-                shell.transform.Rotate(new Vector3(0, -1, 0) * 90 * Time.deltaTime);
+                if (shell.transform.localRotation.eulerAngles.y > 330 || shell.transform.localRotation.eulerAngles.y < 40 )
+                {
+                    shell.transform.Rotate(new Vector3(0, 0, -1) * 90 * Time.deltaTime);
+                }
             }
             else if (Input.GetKey(KeyCode.LeftArrow)){
                 targetForceSteer += new Vector3(-90 * Time.deltaTime - steerAddition, 0, 0); 
-                shell.transform.Rotate(new Vector3(0, 1, 0) * 90 * Time.deltaTime);
+                if (shell.transform.localRotation.eulerAngles.y < 30 || shell.transform.localRotation.eulerAngles.y > 320)
+                {
+                    shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);
+                }
+            }
+            else
+            {
+                if (shell.transform.localRotation.eulerAngles.y < 358 && shell.transform.localRotation.eulerAngles.y > 180)
+                {
+                    shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);
+                }
+                else if (shell.transform.localRotation.eulerAngles.y > 2 && shell.transform.localRotation.eulerAngles.y <= 180)
+                {
+                    shell.transform.Rotate(new Vector3(0, 0, -1) * 90 * Time.deltaTime);
+                }
             }
         }
 
