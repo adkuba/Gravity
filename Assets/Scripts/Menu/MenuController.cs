@@ -10,10 +10,12 @@ public class MenuController : MonoBehaviour
 {
     private int highscore;
     private bool infoIsOpen = false;
+    private bool tutorialIsOpen = false;
     private bool textUp = false;
     private bool count = false;
     private bool textDown = false;
     private float animWait = 0;
+    private bool playerMainPosition = true;
     private float hsCounter = 0;
     private Vector2 canvasSize;
     private Vector2 firstTouchPos;
@@ -22,6 +24,11 @@ public class MenuController : MonoBehaviour
     private int delta;
     private int easterEggCounter = 0;
     public Sprite easterEggImage;
+    public Sprite tutorialSprite;
+    public Sprite quitSprite;
+    public Sprite scoreSprite;
+    private String quitText = "Quit";
+    private String moreText = "More";
 
     private GameObject highscoreTextGO;
     private GameObject tutorialInfoText;
@@ -35,12 +42,17 @@ public class MenuController : MonoBehaviour
     public Sprite soundOn;
     public Sprite soundOFF;
     private Image soundImage;
+    private Image infoImageC;
+    private Image scoreImageC;
     private Button soundButton;
     private RectTransform soundButtonRect;
     private GameObject tutorialManager;
     private GameObject tutorialYesGO;
     private GameObject tutorialNo;
     private GameObject scoreImage;
+    private GameObject playerGO;
+    private GameObject coinsGO;
+    private GameObject shopGO;
     private GameObject tutorialBGGO;
     private GameObject tutorialMessGO;
     private Image tutorialBG;
@@ -49,6 +61,9 @@ public class MenuController : MonoBehaviour
     void Start()
     {
         highscoreTextGO = GameObject.FindGameObjectWithTag("Highscore");
+        playerGO = GameObject.FindGameObjectWithTag("Player");
+        coinsGO = GameObject.FindGameObjectWithTag("Coin");
+        shopGO = GameObject.FindGameObjectWithTag("Shop");
         tutorialManager = GameObject.FindGameObjectWithTag("TutorialManager");
         tutorialYesGO = GameObject.FindGameObjectWithTag("TutorialYes");
         tutorialNo = GameObject.FindGameObjectWithTag("TutorialNo");
@@ -66,25 +81,34 @@ public class MenuController : MonoBehaviour
         canvas = GameObject.FindGameObjectWithTag("MenuCanvas").GetComponent<Canvas>();
         highscoreText = highscoreTextGO.GetComponent<UnityEngine.UI.Text>();
         infoButtonText = infoButtonGO.GetComponentInChildren<UnityEngine.UI.Text>();
+        infoImageC = infoButtonGO.GetComponentInChildren<UnityEngine.UI.Image>();
         Button infoButton = infoButtonGO.GetComponent<UnityEngine.UI.Button>();
+        Button tutorialButton = highscoreTextGO.GetComponent<UnityEngine.UI.Button>();
         Button tutorialYesButton = tutorialYesGO.GetComponent<UnityEngine.UI.Button>();
         Button tutorialNoButton = tutorialNo.GetComponent<UnityEngine.UI.Button>();
         soundButton = soundButtonGO.GetComponent<UnityEngine.UI.Button>();
-        soundImage = soundButton.GetComponent<UnityEngine.UI.Image>();
+        soundImage = soundButtonGO.GetComponent<UnityEngine.UI.Image>();
+        scoreImageC = scoreImage.GetComponent<UnityEngine.UI.Image>();
         tutorialBG = tutorialBGGO.GetComponent<UnityEngine.UI.Image>();
         soundButtonRect = soundButtonGO.GetComponent<RectTransform>();
 
         tutorialManager.SetActive(false);
+        shopGO.SetActive(false);
+        coinsGO.SetActive(false);
         infoButton.onClick.AddListener(TaskOnInfoClick);
         tutorialYesButton.onClick.AddListener(YesTut);
         tutorialNoButton.onClick.AddListener(TaskOnTutorialNoClick);
         canvasSize = new Vector2(canvas.GetComponent<RectTransform>().rect.width, canvas.GetComponent<RectTransform>().rect.height);
         soundButton.onClick.AddListener(SoundButton);
+        tutorialButton.onClick.AddListener(TaskOnTutorialClick);
 
         //zmiana jezyka
         if (Application.systemLanguage == SystemLanguage.Polish)
         {
-            infoButtonText.text = "Poradnik";
+            moreText = "Więcej";
+            infoButtonText.text = moreText;
+            quitText = "Wyjdź";
+            shopGO.GetComponentInChildren<UnityEngine.UI.Text>().text = "Sklep";
             tapTextGO.GetComponentInChildren<UnityEngine.UI.Text>().text = "kliknij aby zagrać";
             tutorialInfoText.GetComponentInChildren<UnityEngine.UI.Text>().text = "Otwórz poradnik i dowiedz się jak kontrolować statek.";
             tutorialMessGO.GetComponentInChildren<UnityEngine.UI.Text>().text = "Otwórz poradnik";
@@ -127,6 +151,22 @@ public class MenuController : MonoBehaviour
 
     void Update()
     {
+        if (!playerMainPosition)
+        {
+            if (playerGO.transform.position.x < 100)
+            {
+                playerGO.transform.Translate(Vector3.right * 5);
+            }
+            
+        }
+        else
+        {
+            if (playerGO.transform.position.x > 0)
+            {
+                playerGO.transform.Translate(Vector3.left * 5);
+            }
+        }
+
         //highscore animation
         if (PlayerPrefs.GetInt("highscoreChanged", 0) == 1)
         {
@@ -218,34 +258,57 @@ public class MenuController : MonoBehaviour
 
     void TaskOnInfoClick()
     {
+        if (!infoIsOpen)
+        {
+            playerMainPosition = false;
+            highscoreText.text = "Tutorial";
+            infoButtonText.text = quitText;
+            scoreImageC.sprite = tutorialSprite;
+            infoButtonText.text = quitText;
+            infoImageC.sprite = quitSprite;
+
+            tapGroup.SetActive(false);
+            shopGO.SetActive(true);
+            coinsGO.SetActive(true);
+            soundButtonGO.SetActive(false);
+            infoIsOpen = true;
+        }
+        else{
+            playerMainPosition = true;
+            highscoreText.text = highscore.ToString();
+            scoreImageC.sprite = scoreSprite;
+            infoButtonText.text = moreText;
+            infoImageC.sprite = tutorialSprite;
+            soundButtonGO.SetActive(true);
+            tapGroup.SetActive(true);
+            shopGO.SetActive(false);
+            coinsGO.SetActive(false);
+            tutorialManager.SetActive(false);
+            infoIsOpen = false;
+            tutorialIsOpen = false;
+        }
+    }
+
+    void TaskOnTutorialClick()
+    {
         easterEggCounter++;
         if (easterEggCounter == 10)
         {
             tutorialBG.sprite = easterEggImage;
         }
-        if (!infoIsOpen)
+        if (!tutorialIsOpen && infoIsOpen)
         {
-            highscoreTextGO.SetActive(false);
-            tapGroup.SetActive(false);
-            soundButtonGO.SetActive(false);
             tutorialManager.SetActive(true);
-            scoreImage.SetActive(false);
-            infoButtonGO.SetActive(false);
-            infoIsOpen = true;
+            tutorialIsOpen = true;
         }
     }
 
     void TaskOnTutorialNoClick()
     {
-        if (infoIsOpen)
+        if (tutorialIsOpen)
         {
-            soundButtonGO.SetActive(true);
-            highscoreTextGO.SetActive(true);
-            tapGroup.SetActive(true);
             tutorialManager.SetActive(false);
-            scoreImage.SetActive(true);
-            infoButtonGO.SetActive(true);
-            infoIsOpen = false;
+            tutorialIsOpen = false;
         }
     }
 

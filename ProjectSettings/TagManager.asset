@@ -50,6 +50,8 @@ TagManager:
   - AdMessage
   - BoostText
   - FuelText
+  - Coin
+  - Shop
   layers:
   - Default
   - TransparentFX
