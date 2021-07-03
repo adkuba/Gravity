@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private float steerAddition = 0;
     private int closestAsteroid = -1;
     private bool slowdownPlanet = false;
+    private bool exitingActionMade = false;
     private float slowdownAngle = 0;
     private float desiredTimeScale;
     private float slowdownCameraAngle = -1;
@@ -604,14 +605,16 @@ public class PlayerController : MonoBehaviour
         //ad manager
         if (exiting)
         {
-            if (adNoClicked)
+            if (adNoClicked && !exitingActionMade)
             {
+                exitingActionMade = true;
                 adManager.SetActive(false);
                 PlayerPrefs.SetInt("ADcounter", 0);
                 endSequenceFinal();
             }
-            if (PlayerPrefs.GetInt("ADdisplayed", 0) == 1)
+            if (PlayerPrefs.GetInt("ADdisplayed", 0) == 1 && !exitingActionMade)
             {
+                exitingActionMade = true;
                 adManager.SetActive(false);
                 endReload();
                 PlayerPrefs.SetInt("ADdisplayed", 0);
@@ -658,16 +661,14 @@ public class PlayerController : MonoBehaviour
             exiting = true;
             rb.isKinematic = true;
             adManager.SetActive(true);
-
-            if (Application.internetReachability == NetworkReachability.NotReachable || (PlayerPrefs.GetInt("ADcounter", 0) == 1))
-            {
-                adNoRect.anchoredPosition = new Vector2(0, -6);
-            }
         }
     }
 
     void endSequenceFinal()
     {
+        int coins = PlayerPrefs.GetInt("coins", 0);
+        PlayerPrefs.SetInt("coins", coins + Convert.ToInt32(score));
+
         if (score > highscore)
         {
             PlayerPrefs.SetInt("lastHighscore", highscore);

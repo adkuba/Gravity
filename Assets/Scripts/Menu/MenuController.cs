@@ -13,6 +13,7 @@ public class MenuController : MonoBehaviour
     private bool tutorialIsOpen = false;
     private bool textUp = false;
     private bool count = false;
+    private int coins = 0;
     private bool textDown = false;
     private float animWait = 0;
     private bool playerMainPosition = true;
@@ -38,6 +39,7 @@ public class MenuController : MonoBehaviour
     private GameObject soundButtonGO;
     private Text highscoreText;
     private Text infoButtonText;
+    private Text coinText;
     private Canvas canvas;
     public Sprite soundOn;
     public Sprite soundOFF;
@@ -51,6 +53,7 @@ public class MenuController : MonoBehaviour
     private GameObject tutorialNo;
     private GameObject scoreImage;
     private GameObject playerGO;
+    private GameObject coinGO;
     private GameObject coinsGO;
     private GameObject shopGO;
     private GameObject tutorialBGGO;
@@ -61,6 +64,7 @@ public class MenuController : MonoBehaviour
     void Start()
     {
         highscoreTextGO = GameObject.FindGameObjectWithTag("Highscore");
+        coinGO = GameObject.FindGameObjectWithTag("Coin");
         playerGO = GameObject.FindGameObjectWithTag("Player");
         coinsGO = GameObject.FindGameObjectWithTag("Coin");
         shopGO = GameObject.FindGameObjectWithTag("Shop");
@@ -81,6 +85,7 @@ public class MenuController : MonoBehaviour
         canvas = GameObject.FindGameObjectWithTag("MenuCanvas").GetComponent<Canvas>();
         highscoreText = highscoreTextGO.GetComponent<UnityEngine.UI.Text>();
         infoButtonText = infoButtonGO.GetComponentInChildren<UnityEngine.UI.Text>();
+        coinText = coinGO.GetComponentInChildren<UnityEngine.UI.Text>();
         infoImageC = infoButtonGO.GetComponentInChildren<UnityEngine.UI.Image>();
         Button infoButton = infoButtonGO.GetComponent<UnityEngine.UI.Button>();
         Button tutorialButton = highscoreTextGO.GetComponent<UnityEngine.UI.Button>();
@@ -101,6 +106,8 @@ public class MenuController : MonoBehaviour
         canvasSize = new Vector2(canvas.GetComponent<RectTransform>().rect.width, canvas.GetComponent<RectTransform>().rect.height);
         soundButton.onClick.AddListener(SoundButton);
         tutorialButton.onClick.AddListener(TaskOnTutorialClick);
+        coins = PlayerPrefs.GetInt("coins", 0);
+        coinText.text = coins.ToString();
 
         //zmiana jezyka
         if (Application.systemLanguage == SystemLanguage.Polish)
