@@ -46,6 +46,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -70,6 +72,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &3851777456951940095
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -89,6 +92,7 @@ GameObject:
   - component: {fileID: 2852667091690974383}
   - component: {fileID: 2852667091690975063}
   - component: {fileID: 2852667091690975060}
+  - component: {fileID: 379514461061383758}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -124,6 +128,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -148,6 +154,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!33 &2852667091690975060
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -156,6 +163,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2852667091690974380}
   m_Mesh: {fileID: 4300000, guid: 1349bf7f1dd731d47b386682a6fc56c0, type: 3}
+--- !u!135 &379514461061383758
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2852667091690974380}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 34.900005
+  m_Center: {x: 0, y: 0.0000076293945, z: -0.0000076293945}
 --- !u!1 &2852667092774005859
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,10 +230,12 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 812566fc5aa370f46b4eefb66751ad74, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -234,6 +256,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &4966287885852213794
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,4 +334,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d16bc6d574f78d849aa3ecb406066033, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sun: {fileID: 4966287885852213794}
