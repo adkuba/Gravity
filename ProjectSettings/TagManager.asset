@@ -53,6 +53,7 @@ TagManager:
   - Coin
   - Shop
   - MainLight
+  - ShopScroll
   layers:
   - Default
   - TransparentFX

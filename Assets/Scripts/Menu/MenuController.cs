@@ -58,6 +58,7 @@ public class MenuController : MonoBehaviour
     private GameObject shopGO;
     private GameObject tutorialBGGO;
     private GameObject tutorialMessGO;
+    private GameObject shopScrollGO;
     private Image tutorialBG;
     
 
@@ -76,6 +77,7 @@ public class MenuController : MonoBehaviour
         tutorialInfoText = GameObject.FindGameObjectWithTag("TutorialInfoText");
         infoButtonGO = GameObject.FindGameObjectWithTag("InfoButton");
         tapTextGO = GameObject.FindGameObjectWithTag("TapText");
+        shopScrollGO = GameObject.FindGameObjectWithTag("ShopScroll");
         soundButtonGO = GameObject.FindGameObjectWithTag("SoundB");
         tutorialBGGO = GameObject.FindGameObjectWithTag("TutorialBG");
         tutorialMessGO = GameObject.FindGameObjectWithTag("TutorialMess");
@@ -91,6 +93,7 @@ public class MenuController : MonoBehaviour
         Button tutorialButton = highscoreTextGO.GetComponent<UnityEngine.UI.Button>();
         Button tutorialYesButton = tutorialYesGO.GetComponent<UnityEngine.UI.Button>();
         Button tutorialNoButton = tutorialNo.GetComponent<UnityEngine.UI.Button>();
+        Button shopButton = shopGO.GetComponent<UnityEngine.UI.Button>();
         soundButton = soundButtonGO.GetComponent<UnityEngine.UI.Button>();
         soundImage = soundButtonGO.GetComponent<UnityEngine.UI.Image>();
         scoreImageC = scoreImage.GetComponent<UnityEngine.UI.Image>();
@@ -99,7 +102,9 @@ public class MenuController : MonoBehaviour
 
         tutorialManager.SetActive(false);
         shopGO.SetActive(false);
+        shopScrollGO.SetActive(false);
         coinsGO.SetActive(false);
+        shopButton.onClick.AddListener(ShopClick);
         infoButton.onClick.AddListener(TaskOnInfoClick);
         tutorialYesButton.onClick.AddListener(YesTut);
         tutorialNoButton.onClick.AddListener(TaskOnTutorialNoClick);
@@ -281,18 +286,26 @@ public class MenuController : MonoBehaviour
             infoIsOpen = true;
         }
         else{
-            playerMainPosition = true;
-            highscoreText.text = highscore.ToString();
-            scoreImageC.sprite = scoreSprite;
-            infoButtonText.text = moreText;
-            infoImageC.sprite = tutorialSprite;
-            soundButtonGO.SetActive(true);
-            tapGroup.SetActive(true);
-            shopGO.SetActive(false);
-            coinsGO.SetActive(false);
-            tutorialManager.SetActive(false);
-            infoIsOpen = false;
-            tutorialIsOpen = false;
+            if (!shopGO.activeSelf)
+            {
+                shopScrollGO.SetActive(false);
+                shopGO.SetActive(true);
+            }
+            else
+            {
+                playerMainPosition = true;
+                highscoreText.text = highscore.ToString();
+                scoreImageC.sprite = scoreSprite;
+                infoButtonText.text = moreText;
+                infoImageC.sprite = tutorialSprite;
+                soundButtonGO.SetActive(true);
+                tapGroup.SetActive(true);
+                shopGO.SetActive(false);
+                coinsGO.SetActive(false);
+                tutorialManager.SetActive(false);
+                infoIsOpen = false;
+                tutorialIsOpen = false;
+            }
         }
     }
 
@@ -308,6 +321,12 @@ public class MenuController : MonoBehaviour
             tutorialManager.SetActive(true);
             tutorialIsOpen = true;
         }
+    }
+
+    void ShopClick()
+    {
+        shopGO.SetActive(false);
+        shopScrollGO.SetActive(true);
     }
 
     void TaskOnTutorialNoClick()
