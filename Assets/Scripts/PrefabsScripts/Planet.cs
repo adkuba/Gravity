@@ -18,16 +18,10 @@ public class Planet : MonoBehaviour
         screenBounds = new Vector2(Camera.main.aspect * Camera.main.orthographicSize, Camera.main.orthographicSize);
         player = GameObject.FindGameObjectWithTag("Player");
 
-        //fuel
-        float rand = Random.value;
-        fuel = false;
-        if (rand > .66f)
-        {
-            fuel = true;
-        }
+        //fuel is set in PlanetSpawner
         
         //additional effects
-        rand = Random.value;
+        float rand = Random.value;
         bool moonK = false;
         if (rand <= .4f)
         {

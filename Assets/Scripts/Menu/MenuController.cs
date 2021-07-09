@@ -316,7 +316,7 @@ public class MenuController : MonoBehaviour
         {
             tutorialBG.sprite = easterEggImage;
         }
-        if (!tutorialIsOpen && infoIsOpen)
+        if (!tutorialIsOpen && infoIsOpen && !shopScrollGO.activeSelf)
         {
             tutorialManager.SetActive(true);
             tutorialIsOpen = true;
@@ -325,8 +325,11 @@ public class MenuController : MonoBehaviour
 
     void ShopClick()
     {
-        shopGO.SetActive(false);
-        shopScrollGO.SetActive(true);
+        if (!tutorialIsOpen)
+        {
+            shopGO.SetActive(false);
+            shopScrollGO.SetActive(true);
+        }   
     }
 
     void TaskOnTutorialNoClick()

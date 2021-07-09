@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 258339682990026628}
   m_Layer: 0
   m_Name: Bistar
-  m_TagString: Untagged
+  m_TagString: Bistar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

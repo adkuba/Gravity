@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 4484280121138276981}
   m_Layer: 0
   m_Name: Manthra
-  m_TagString: Untagged
+  m_TagString: Manthra
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

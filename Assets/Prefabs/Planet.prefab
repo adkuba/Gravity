@@ -93,7 +93,24 @@ MonoBehaviour:
   - {fileID: 8765622404392999003, guid: 7addfa0a465f9b0498cdcbdd61f1bf2c, type: 3}
   - {fileID: 4094593225393332293, guid: 6b1c2514143feb34f961990b49820e17, type: 3}
   - {fileID: 3453748061711847130, guid: 927be67d805329644a44d670f3ad848f, type: 3}
-  premiumPlanets: []
+  - {fileID: 5581510338672931016, guid: a6a72cafbda85e54e958a3af150ed8a6, type: 3}
+  premiumPlanets:
+  - {fileID: 7463736835946922517, guid: b2beee3504093f343a0924c33272c5c3, type: 3}
+  - {fileID: 5029027771131337913, guid: e538d89642de92d42a4af795a4318d93, type: 3}
+  - {fileID: 6629951798546396877, guid: 1ec5653690bd9cb4e827c1a51fa3931e, type: 3}
+  - {fileID: 686493444357119723, guid: ed038cefef3c1f645b7bb4b6e9a602b0, type: 3}
+  - {fileID: 5523586736206938862, guid: 3382c697326c3c54a9ddc920b085bbe8, type: 3}
+  - {fileID: 2949329524949928795, guid: 64e0cbcb64716ba49b63436f435d6194, type: 3}
+  - {fileID: 5644038022553130478, guid: 2eacb3e8ca5d09c479b3f6ed5ea049e6, type: 3}
+  - {fileID: 8132112814925821241, guid: fcbed5508b8957c439a2045dd0aa3d68, type: 3}
+  - {fileID: 9183259099838471537, guid: fb1b3106ed44ba147b0bfb9771650acf, type: 3}
+  - {fileID: 8944349648853378201, guid: e9b9aa45255c1904f9ae0b63094bec0d, type: 3}
+  - {fileID: 8204849969776465255, guid: 5f00bce292e1516409ec4a3738da487b, type: 3}
+  - {fileID: 6098656632856160460, guid: 14b7343d6f106324ba8312494d1ab5a8, type: 3}
+  - {fileID: 6696601749036450857, guid: 206f3f34ceac1084eb47f8e922285106, type: 3}
+  - {fileID: 8942854719219999452, guid: ff072f81d46a5be43828681be86275d5, type: 3}
+  - {fileID: 6648265329834713457, guid: cdaeca6592f9eaa4cb2ca070c8b0cabb, type: 3}
+  - {fileID: 7069063396132387610, guid: eafef71159f48e0439e41d3db61392ff, type: 3}
 --- !u!1 &8354480203302825013
 GameObject:
   m_ObjectHideFlags: 0

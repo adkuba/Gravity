@@ -299,7 +299,7 @@ GameObject:
   - component: {fileID: 3571690925350060605}
   m_Layer: 0
   m_Name: Sugah
-  m_TagString: Untagged
+  m_TagString: Sugah
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
