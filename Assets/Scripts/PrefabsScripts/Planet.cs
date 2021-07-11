@@ -7,7 +7,7 @@ public class Planet : MonoBehaviour
     private Vector2 screenBounds;
     private Vector2 widthBounds;
     private Vector2 heightBounds;
-    public bool fuel;
+    public bool fuel = true;
     private GameObject moon;
     private GameObject player;
 

@@ -31,6 +31,10 @@ public class MenuController : MonoBehaviour
     private String quitText = "Quit";
     private String moreText = "More";
 
+    public AudioSource audioSource;
+    public AudioClip select;
+    public AudioClip back;
+
     private GameObject highscoreTextGO;
     private GameObject tutorialInfoText;
     private GameObject infoButtonGO;
@@ -272,6 +276,8 @@ public class MenuController : MonoBehaviour
     {
         if (!infoIsOpen)
         {
+            audioSource.clip = select;
+            audioSource.Play();
             playerMainPosition = false;
             highscoreText.text = "Tutorial";
             infoButtonText.text = quitText;
@@ -285,7 +291,10 @@ public class MenuController : MonoBehaviour
             soundButtonGO.SetActive(false);
             infoIsOpen = true;
         }
-        else{
+        else
+        {
+            audioSource.clip = back;
+            audioSource.Play();
             if (!shopGO.activeSelf)
             {
                 shopScrollGO.SetActive(false);
@@ -318,6 +327,8 @@ public class MenuController : MonoBehaviour
         }
         if (!tutorialIsOpen && infoIsOpen && !shopScrollGO.activeSelf)
         {
+            audioSource.clip = select;
+            audioSource.Play();
             tutorialManager.SetActive(true);
             tutorialIsOpen = true;
         }
@@ -327,6 +338,8 @@ public class MenuController : MonoBehaviour
     {
         if (!tutorialIsOpen)
         {
+            audioSource.clip = select;
+            audioSource.Play();
             shopGO.SetActive(false);
             shopScrollGO.SetActive(true);
         }   
@@ -336,6 +349,8 @@ public class MenuController : MonoBehaviour
     {
         if (tutorialIsOpen)
         {
+            audioSource.clip = back;
+            audioSource.Play();
             tutorialManager.SetActive(false);
             tutorialIsOpen = false;
         }
@@ -344,6 +359,8 @@ public class MenuController : MonoBehaviour
 
     void YesTut()
     {
+        audioSource.clip = select;
+        audioSource.Play();
         PlayerPrefs.SetInt("onlyPTut", 0);
         SceneManager.LoadScene("Tutorial");
     }
@@ -353,11 +370,15 @@ public class MenuController : MonoBehaviour
     {
         if (PlayerPrefs.GetInt("canPlayMusic", 1) == 1)
         {
+            audioSource.clip = back;
+            audioSource.Play();
             PlayerPrefs.SetInt("canPlayMusic", 0);
             soundImage.sprite = soundOFF;
         }
         else
         {
+            audioSource.clip = select;
+            audioSource.Play();
             PlayerPrefs.SetInt("canPlayMusic", 1);
             soundImage.sprite = soundOn;
         }

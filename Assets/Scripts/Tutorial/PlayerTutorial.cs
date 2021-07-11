@@ -431,7 +431,7 @@ public class PlayerTutorial : MonoBehaviour
                 {
                     rightTut = true;
                     targetForceSteer += new Vector3(90 * Time.deltaTime + steerAddition, 0, 0);
-                    shell.transform.Rotate(new Vector3(0, -1, 0) * 90 * Time.deltaTime);
+                    shell.transform.Rotate(new Vector3(0, 0, -1) * 90 * Time.deltaTime);
                 }
             }
             else if (pos.x < Screen.width / 2)
@@ -443,7 +443,7 @@ public class PlayerTutorial : MonoBehaviour
                 }
 
                 targetForceSteer += new Vector3(-90 * Time.deltaTime - steerAddition, 0, 0);
-                shell.transform.Rotate(new Vector3(0, 1, 0) * 90 * Time.deltaTime);
+                shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);
             }
         }
 

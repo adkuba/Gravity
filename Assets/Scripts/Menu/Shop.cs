@@ -12,6 +12,10 @@ public class Shop : MonoBehaviour
     private GameObject doneGO;
     private GameObject coinsGO;
 
+    public AudioSource audioSource;
+    public AudioClip accept;
+    public AudioClip deny;
+
     void Start()
     {
         coinsGO = GameObject.FindGameObjectWithTag("Coin");
@@ -40,6 +44,8 @@ public class Shop : MonoBehaviour
         int coins = PlayerPrefs.GetInt("coins", 0);
         if (coins >= price)
         {
+            audioSource.clip = accept;
+            audioSource.Play();
             PlayerPrefs.SetInt(gameObject.tag, 1);
             PlayerPrefs.SetInt("coins", coins - price);
             doneGO.SetActive(true);
@@ -49,6 +55,11 @@ public class Shop : MonoBehaviour
             {
                 coinsGO.GetComponentInChildren<UnityEngine.UI.Text>().text = (coins-price).ToString();
             }
+        }
+        else
+        {
+            audioSource.clip = deny;
+            audioSource.Play();
         }
     }
 }

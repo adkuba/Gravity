@@ -358,9 +358,9 @@ public class PlayerController : MonoBehaviour
 
 
         //steering, deltaTime is important!
-        if (usedFuel < fuelTank && Time.time - timeFromSpawn > 1) //&& Input.touchCount > 0
+        if (usedFuel < fuelTank && Time.time - timeFromSpawn > 1 && Input.touchCount > 0) //
         {
-            /*
+            
             Touch touch = Input.GetTouch(0);
             Vector2 pos = touch.position;
 
@@ -388,14 +388,15 @@ public class PlayerController : MonoBehaviour
             else if (pos.x > Screen.width / 2)
             {
                 targetForceSteer += new Vector3(90 * Time.deltaTime + steerAddition, 0, 0);
-                shell.transform.Rotate(new Vector3(0, -1, 0) * 90 * Time.deltaTime);
+                shell.transform.Rotate(new Vector3(0, 0, -1) * 90 * Time.deltaTime);
             }
             else if (pos.x < Screen.width / 2)
             {
                 targetForceSteer += new Vector3(-90 * Time.deltaTime - steerAddition, 0, 0); 
-                shell.transform.Rotate(new Vector3(0, 1, 0) * 90 * Time.deltaTime);
+                shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);
             }
-            */
+            
+            /*
             if (Input.GetKey(KeyCode.RightArrow)){
                 targetForceSteer += new Vector3(90 * Time.deltaTime + steerAddition, 0, 0);
                 if (shell.transform.localRotation.eulerAngles.y > 330 || shell.transform.localRotation.eulerAngles.y < 40 )
@@ -420,7 +421,7 @@ public class PlayerController : MonoBehaviour
                 {
                     shell.transform.Rotate(new Vector3(0, 0, -1) * 90 * Time.deltaTime);
                 }
-            }
+            }*/
         }
 
         //boost add text
