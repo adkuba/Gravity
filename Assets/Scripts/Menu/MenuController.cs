@@ -16,7 +16,7 @@ public class MenuController : MonoBehaviour
     private int coins = 0;
     private bool textDown = false;
     private float animWait = 0;
-    private bool playerMainPosition = true;
+    private float playerXMove = 0;
     private float hsCounter = 0;
     private Vector2 canvasSize;
     private Vector2 firstTouchPos;
@@ -167,20 +167,17 @@ public class MenuController : MonoBehaviour
 
     void Update()
     {
-        if (!playerMainPosition)
+        float previousPosition = playerGO.transform.position.x;
+        if (playerXMove > 10)
         {
-            if (playerGO.transform.position.x < 100)
-            {
-                playerGO.transform.Translate(Vector3.right * 5);
-            }
+            playerGO.transform.Translate(Vector3.left * 5);
+            playerXMove -= (previousPosition - playerGO.transform.position.x);
             
         }
-        else
+        else if (playerXMove < -10)
         {
-            if (playerGO.transform.position.x > 0)
-            {
-                playerGO.transform.Translate(Vector3.left * 5);
-            }
+            playerGO.transform.Translate(Vector3.right * 5);
+            playerXMove += (playerGO.transform.position.x - previousPosition);
         }
 
         //highscore animation
@@ -278,7 +275,7 @@ public class MenuController : MonoBehaviour
         {
             audioSource.clip = select;
             audioSource.Play();
-            playerMainPosition = false;
+            playerXMove = -120.0f;
             highscoreText.text = "Tutorial";
             infoButtonText.text = quitText;
             scoreImageC.sprite = tutorialSprite;
@@ -302,7 +299,7 @@ public class MenuController : MonoBehaviour
             }
             else
             {
-                playerMainPosition = true;
+                playerXMove = 120.0f;
                 highscoreText.text = highscore.ToString();
                 scoreImageC.sprite = scoreSprite;
                 infoButtonText.text = moreText;

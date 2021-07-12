@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class Planet : MonoBehaviour
@@ -23,7 +24,7 @@ public class Planet : MonoBehaviour
         //additional effects
         float rand = Random.value;
         bool moonK = false;
-        if (rand <= .4f)
+        if (rand <= .4f && SceneManager.GetActiveScene().name != "Tutorial")
         {
             moonK = true;
         }

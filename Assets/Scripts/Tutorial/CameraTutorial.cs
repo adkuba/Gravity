@@ -4,16 +4,12 @@ using UnityEngine;
 
 public class CameraTutorial : MonoBehaviour
 {
-    private Vector2 screenBounds;
     private GameObject player;
-    private Rigidbody playerRigidbody;
 
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        playerRigidbody = player.GetComponent<Rigidbody>();
-        screenBounds = new Vector2(Camera.main.aspect * Camera.main.orthographicSize, Camera.main.orthographicSize);
     }
 
 

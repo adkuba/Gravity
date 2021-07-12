@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class PlanetSpawner : MonoBehaviour
@@ -56,15 +57,23 @@ public class PlanetSpawner : MonoBehaviour
         planet.transform.localScale = new Vector3(0.015f, 0.015f, 0.015f);
 
         // set fuel chance
-        float fuel = fuelChance[planet.tag];
-        float rand = Random.value;
-        if (rand <= fuel)
+        if (SceneManager.GetActiveScene().name != "Tutorial")
         {
-            transform.parent.GetComponent<Planet>().fuel = true;
+            float fuel = fuelChance[planet.tag];
+            float rand = Random.value;
+            if (rand <= fuel)
+            {
+                transform.parent.GetComponent<Planet>().fuel = true;
+            }
+            else
+            {
+                transform.parent.GetComponent<Planet>().fuel = false;
+            }
         }
         else
         {
-            transform.parent.GetComponent<Planet>().fuel = false;
+            transform.parent.GetComponent<Planet>().fuel = true;
         }
+        
     }
 }

@@ -446,6 +446,17 @@ public class PlayerTutorial : MonoBehaviour
                 shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);
             }
         }
+        else
+        {
+            if (shell.transform.localRotation.eulerAngles.y < 358 && shell.transform.localRotation.eulerAngles.y > 180)
+            {
+                shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);
+            }
+            else if (shell.transform.localRotation.eulerAngles.y > 2 && shell.transform.localRotation.eulerAngles.y <= 180)
+            {
+                shell.transform.Rotate(new Vector3(0, 0, -1) * 90 * Time.deltaTime);
+            }
+        }
 
         //boost add text
         if (boostAdd.activeSelf && Time.time - fromLastBoost > 4)
@@ -510,7 +521,7 @@ public class PlayerTutorial : MonoBehaviour
         //gravity
         if (atractedTo != -1)
         {
-            bool tank = planets[atractedTo].GetComponent<TutPlanet>().fuel;
+            bool tank = planets[atractedTo].GetComponent<Planet>().fuel;
             if (tank && usedFuel > 0 && !exiting)
             {
                 fuelEffect.SetActive(true);

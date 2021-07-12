@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
     private float slowdownAngle = 0;
     private float desiredTimeScale;
     private float slowdownCameraAngle = -1;
-    private String fuelWarningText = "Orbit";
+    private int desiredScore = 0;
 
     private GameObject[] planets;
     private GameObject[] asteroids;
@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
     private GameObject adYesGO;
     private GameObject boostTextG0;
     private GameObject fuelTextGO;
+    private GameObject coinInfoGO;
     private GameObject netInfo;
     private UnityEngine.UI.Text adMess;
     private Rigidbody rb;
@@ -64,6 +65,7 @@ public class PlayerController : MonoBehaviour
     private UnityEngine.UI.Image fuelImage;
     private UnityEngine.UI.Image boostImage;
     private UnityEngine.UI.Text scoreText;
+    private UnityEngine.UI.Text coinInfoText;
     private UnityEngine.UI.Text boostText;
     private UnityEngine.UI.Text fuelText;
     private UnityEngine.UI.Text boostAddText;
@@ -74,6 +76,7 @@ public class PlayerController : MonoBehaviour
     {
         scoreGameObject = GameObject.FindGameObjectWithTag("Score");
         boostTextG0 = GameObject.FindGameObjectWithTag("BoostText");
+        coinInfoGO = GameObject.FindGameObjectWithTag("CoinInfo");
         fuelTextGO = GameObject.FindGameObjectWithTag("FuelText");
         shell = GameObject.FindGameObjectWithTag("Shell");
         spawn = GameObject.FindGameObjectWithTag("Spawn");
@@ -103,6 +106,7 @@ public class PlayerController : MonoBehaviour
         fuelImage = fuelGameObject.GetComponent<UnityEngine.UI.Image>();
         boostImage = boostGameObject.GetComponent<UnityEngine.UI.Image>();
         scoreText = scoreGameObject.GetComponent<UnityEngine.UI.Text>();
+        coinInfoText = coinInfoGO.GetComponent<UnityEngine.UI.Text>();
         boostText = boostTextG0.GetComponent<UnityEngine.UI.Text>();
         fuelText = fuelTextGO.GetComponent<UnityEngine.UI.Text>();
         adMess = adMessGO.GetComponent<UnityEngine.UI.Text>();
@@ -116,7 +120,6 @@ public class PlayerController : MonoBehaviour
             netInfo.GetComponent<UnityEngine.UI.Text>().text = "Brak internetu!";
             adMessage.GetComponent<UnityEngine.UI.Text>().text = "Kliknij tak aby obejrzeć reklamę i kontynuować grę.";
             adMess.text = "Wyświetl reklamę";
-            fuelWarningText = "Orbituj";
         }
 
         fuelEffect.SetActive(false);
@@ -183,7 +186,6 @@ public class PlayerController : MonoBehaviour
         {
             usedFuel += Time.deltaTime * 5;
             fuelWarning.SetActive(true);
-            scoreText.text = fuelWarningText;
         }
         else
         {
@@ -193,7 +195,7 @@ public class PlayerController : MonoBehaviour
         //score, boost, fuel cockpit
         fuelImage.fillAmount = percent / 100;
         fuelText.text = percent.ToString("F0") + "%";
-        int desiredScore = Convert.ToInt32(Vector3.Distance(Vector3.zero, transform.position) * 0.4f) + addScore;
+        desiredScore = Convert.ToInt32(Vector3.Distance(Vector3.zero, transform.position) * 0.4f) + addScore;
         if (score < desiredScore)
         {
             score += 20 * Time.deltaTime;
@@ -410,18 +412,18 @@ public class PlayerController : MonoBehaviour
                 {
                     shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);
                 }
-            }
-            else
-            {
-                if (shell.transform.localRotation.eulerAngles.y < 358 && shell.transform.localRotation.eulerAngles.y > 180)
-                {
-                    shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);
-                }
-                else if (shell.transform.localRotation.eulerAngles.y > 2 && shell.transform.localRotation.eulerAngles.y <= 180)
-                {
-                    shell.transform.Rotate(new Vector3(0, 0, -1) * 90 * Time.deltaTime);
-                }
             }*/
+        }
+        else
+        {
+            if (shell.transform.localRotation.eulerAngles.y < 358 && shell.transform.localRotation.eulerAngles.y > 180)
+            {
+                shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);
+            }
+            else if (shell.transform.localRotation.eulerAngles.y > 2 && shell.transform.localRotation.eulerAngles.y <= 180)
+            {
+                shell.transform.Rotate(new Vector3(0, 0, -1) * 90 * Time.deltaTime);
+            }
         }
 
         //boost add text
@@ -643,7 +645,7 @@ public class PlayerController : MonoBehaviour
 
     void endReload()
     {
-        PlayerPrefs.SetInt("addScore", Convert.ToInt32(score));
+        PlayerPrefs.SetInt("addScore", desiredScore);
         
         if (!spawn.GetComponent<ParticleSystem>().isPlaying)
         {
@@ -661,6 +663,7 @@ public class PlayerController : MonoBehaviour
             crashSound.Play();
             exiting = true;
             rb.isKinematic = true;
+            coinInfoText.text = "+ " + desiredScore.ToString();
             adManager.SetActive(true);
         }
     }

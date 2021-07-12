@@ -11,10 +11,13 @@ public class MenuPlayer : MonoBehaviour
 
     void Update()
     {
-        Vector3 deviceAcc = Input.acceleration;
-        deviceAcc.Normalize();
-        deviceAcc = new Vector3(deviceAcc.x, deviceAcc.y);
-        transform.position += deviceAcc * 20 * Time.deltaTime;
+        if (Input.acceleration != null)
+        {
+            Vector3 deviceAcc = Input.acceleration;
+            deviceAcc.Normalize();
+            deviceAcc.z = 0;
+            transform.Translate(deviceAcc * 20 * Time.deltaTime);
+        }
         score = Vector3.Distance(Vector3.zero, transform.position) * 0.4f;
     }
 

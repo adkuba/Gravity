@@ -33,10 +33,10 @@ public class Music : MonoBehaviour
             {
                 playedMusic.Clear();
             }
-            //70% chance of main loop
-            //30% chance of music
+            //90% chance of main loop
+            //10% chance of music
             float random = Random.value;
-            if (random <= 0.7f)
+            if (random <= 0.9f)
             {
                 musicSource.clip = mainLoop;
                 musicSource.Play();
