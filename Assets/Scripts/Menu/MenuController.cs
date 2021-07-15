@@ -157,10 +157,23 @@ public class MenuController : MonoBehaviour
         delta = PlayerPrefs.GetInt("highscore", 0) - highscore;
 
         //first open
-        if (PlayerPrefs.GetInt("hasPlayed1_1", 0) == 0)
+        if (PlayerPrefs.GetInt("hasPlayed", 0) == 0)
         {
-            PlayerPrefs.SetInt("hasPlayed1_1", 1);
-            TaskOnInfoClick();
+            PlayerPrefs.SetInt("hasPlayed", 1);
+            playerXMove = -120.0f;
+            highscoreText.text = "Tutorial";
+            infoButtonText.text = quitText;
+            scoreImageC.sprite = tutorialSprite;
+            infoButtonText.text = quitText;
+            infoImageC.sprite = quitSprite;
+
+            tapGroup.SetActive(false);
+            shopGO.SetActive(true);
+            coinsGO.SetActive(true);
+            soundButtonGO.SetActive(false);
+            infoIsOpen = true;
+            tutorialManager.SetActive(true);
+            tutorialIsOpen = true;
         }
     }
 
