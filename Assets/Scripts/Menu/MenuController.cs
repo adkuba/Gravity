@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System;
 using UnityEngine.SceneManagement;
 using static System.Math;
@@ -55,8 +56,6 @@ public class MenuController : MonoBehaviour
     private Image infoImageC;
     private Image scoreImageC;
     private Button soundButton;
-    private RectTransform soundButtonRect;
-    private RectTransform supportRect;
     private GameObject tutorialManager;
     private GameObject tutorialYesGO;
     private GameObject tutorialNo;
@@ -64,6 +63,7 @@ public class MenuController : MonoBehaviour
     private GameObject playerGO;
     private GameObject coinGO;
     private GameObject coinsGO;
+    private GameObject playAreaGO;
     private GameObject shopGO;
     private GameObject supportGO;
     private GameObject tutorialBGGO;
@@ -78,6 +78,7 @@ public class MenuController : MonoBehaviour
         supportGO = GameObject.FindGameObjectWithTag("Support");
         coinGO = GameObject.FindGameObjectWithTag("Coin");
         playerGO = GameObject.FindGameObjectWithTag("Player");
+        playAreaGO = GameObject.FindGameObjectWithTag("PlayArea");
         coinsGO = GameObject.FindGameObjectWithTag("Coin");
         shopGO = GameObject.FindGameObjectWithTag("Shop");
         tutorialManager = GameObject.FindGameObjectWithTag("TutorialManager");
@@ -106,12 +107,11 @@ public class MenuController : MonoBehaviour
         Button tutorialNoButton = tutorialNo.GetComponent<UnityEngine.UI.Button>();
         Button supportButton = supportGO.GetComponent<UnityEngine.UI.Button>();
         Button shopButton = shopGO.GetComponent<UnityEngine.UI.Button>();
+        Button playButton = playAreaGO.GetComponent<UnityEngine.UI.Button>();
         soundButton = soundButtonGO.GetComponent<UnityEngine.UI.Button>();
         soundImage = soundButtonGO.GetComponent<UnityEngine.UI.Image>();
         scoreImageC = scoreImage.GetComponent<UnityEngine.UI.Image>();
         tutorialBG = tutorialBGGO.GetComponent<UnityEngine.UI.Image>();
-        soundButtonRect = soundButtonGO.GetComponent<RectTransform>();
-        supportRect = supportGO.GetComponent<RectTransform>();
 
         tutorialManager.SetActive(false);
         shopGO.SetActive(false);
@@ -121,6 +121,7 @@ public class MenuController : MonoBehaviour
         infoButton.onClick.AddListener(TaskOnInfoClick);
         tutorialYesButton.onClick.AddListener(YesTut);
         supportButton.onClick.AddListener(Support);
+        playButton.onClick.AddListener(Play);
         tutorialNoButton.onClick.AddListener(TaskOnTutorialNoClick);
         canvasSize = new Vector2(canvas.GetComponent<RectTransform>().rect.width, canvas.GetComponent<RectTransform>().rect.height);
         soundButton.onClick.AddListener(SoundButton);
@@ -270,40 +271,14 @@ public class MenuController : MonoBehaviour
                 PlayerPrefs.SetInt("highscoreChanged", 0);
             }
         }
+    }
 
+    public void Play()
+    {
         if (!infoIsOpen)
         {
-            if (Input.touchCount == 1)
-            {
-                Touch touch = Input.GetTouch(0);
-                if (touch.phase == TouchPhase.Began)
-                {
-                    firstTouchPos = touch.position;
-                    lastTouchPos = touch.position;
-                }
-                else if (touch.phase == TouchPhase.Moved)
-                {
-                    lastTouchPos = touch.position;
-                }
-                else if (touch.phase == TouchPhase.Ended)
-                {
-                    lastTouchPos = touch.position;
-
-                    //swipe detection
-                    if (Math.Abs(lastTouchPos.x - firstTouchPos.x) < dragDistance && Math.Abs(lastTouchPos.y - firstTouchPos.y) < dragDistance)
-                    {
-                        //not clicking buttons
-                        //touch is in pixels!!!
-                        float percentUp = (canvasSize.y + soundButtonRect.anchoredPosition.y - 3 * (soundButtonRect.rect.height / 2) / 2) / canvasSize.y;
-                        float pixelValueUp = Screen.height * percentUp;
-                        if (lastTouchPos.y < pixelValueUp && lastTouchPos.y > supportRect.anchoredPosition.y + 40)
-                        {
-                            PlayerPrefs.SetInt("addScore", 0);
-                            SceneManager.LoadScene("Game");
-                        }
-                    }
-                }
-            }
+            PlayerPrefs.SetInt("addScore", 0);
+            SceneManager.LoadScene("Game");
         }
     }
 
@@ -395,7 +370,7 @@ public class MenuController : MonoBehaviour
 
     void Support()
     {
-        DateTime campaignEnd = System.DateTime.Parse("09/25/2021");
+        DateTime campaignEnd = new DateTime(2021, 9, 25);
         DateTime now = System.DateTime.Now;
 
         if (now.Date < campaignEnd.Date)

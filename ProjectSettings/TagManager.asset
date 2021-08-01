@@ -76,6 +76,7 @@ TagManager:
   - Xagobah
   - CoinInfo
   - Support
+  - PlayArea
   layers:
   - Default
   - TransparentFX
