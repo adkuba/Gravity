@@ -6,6 +6,10 @@ using System;
 using UnityEngine.SceneManagement;
 using static System.Math;
 
+#if UNITY_IOS
+using Unity.Advertisement.IosSupport;
+#endif
+
 public class MenuController : MonoBehaviour
 {
     private int highscore;
@@ -52,6 +56,7 @@ public class MenuController : MonoBehaviour
     private Image scoreImageC;
     private Button soundButton;
     private RectTransform soundButtonRect;
+    private RectTransform supportRect;
     private GameObject tutorialManager;
     private GameObject tutorialYesGO;
     private GameObject tutorialNo;
@@ -60,6 +65,7 @@ public class MenuController : MonoBehaviour
     private GameObject coinGO;
     private GameObject coinsGO;
     private GameObject shopGO;
+    private GameObject supportGO;
     private GameObject tutorialBGGO;
     private GameObject tutorialMessGO;
     private GameObject shopScrollGO;
@@ -69,6 +75,7 @@ public class MenuController : MonoBehaviour
     void Start()
     {
         highscoreTextGO = GameObject.FindGameObjectWithTag("Highscore");
+        supportGO = GameObject.FindGameObjectWithTag("Support");
         coinGO = GameObject.FindGameObjectWithTag("Coin");
         playerGO = GameObject.FindGameObjectWithTag("Player");
         coinsGO = GameObject.FindGameObjectWithTag("Coin");
@@ -97,12 +104,14 @@ public class MenuController : MonoBehaviour
         Button tutorialButton = highscoreTextGO.GetComponent<UnityEngine.UI.Button>();
         Button tutorialYesButton = tutorialYesGO.GetComponent<UnityEngine.UI.Button>();
         Button tutorialNoButton = tutorialNo.GetComponent<UnityEngine.UI.Button>();
+        Button supportButton = supportGO.GetComponent<UnityEngine.UI.Button>();
         Button shopButton = shopGO.GetComponent<UnityEngine.UI.Button>();
         soundButton = soundButtonGO.GetComponent<UnityEngine.UI.Button>();
         soundImage = soundButtonGO.GetComponent<UnityEngine.UI.Image>();
         scoreImageC = scoreImage.GetComponent<UnityEngine.UI.Image>();
         tutorialBG = tutorialBGGO.GetComponent<UnityEngine.UI.Image>();
         soundButtonRect = soundButtonGO.GetComponent<RectTransform>();
+        supportRect = supportGO.GetComponent<RectTransform>();
 
         tutorialManager.SetActive(false);
         shopGO.SetActive(false);
@@ -111,6 +120,7 @@ public class MenuController : MonoBehaviour
         shopButton.onClick.AddListener(ShopClick);
         infoButton.onClick.AddListener(TaskOnInfoClick);
         tutorialYesButton.onClick.AddListener(YesTut);
+        supportButton.onClick.AddListener(Support);
         tutorialNoButton.onClick.AddListener(TaskOnTutorialNoClick);
         canvasSize = new Vector2(canvas.GetComponent<RectTransform>().rect.width, canvas.GetComponent<RectTransform>().rect.height);
         soundButton.onClick.AddListener(SoundButton);
@@ -126,6 +136,7 @@ public class MenuController : MonoBehaviour
             quitText = "Wyjdź";
             shopGO.GetComponentInChildren<UnityEngine.UI.Text>().text = "Sklep";
             tapTextGO.GetComponentInChildren<UnityEngine.UI.Text>().text = "kliknij aby zagrać";
+            supportGO.GetComponent<UnityEngine.UI.Text>().text = "Wesprzyj nas";
             tutorialInfoText.GetComponentInChildren<UnityEngine.UI.Text>().text = "Otwórz poradnik i dowiedz się jak kontrolować statek.";
             tutorialMessGO.GetComponentInChildren<UnityEngine.UI.Text>().text = "Otwórz poradnik";
             tutorialYesGO.transform.GetChild(0).gameObject.GetComponentInChildren<UnityEngine.UI.Text>().text = "TAK";
@@ -168,6 +179,7 @@ public class MenuController : MonoBehaviour
             infoImageC.sprite = quitSprite;
 
             tapGroup.SetActive(false);
+            supportGO.SetActive(false);
             shopGO.SetActive(true);
             coinsGO.SetActive(true);
             soundButtonGO.SetActive(false);
@@ -175,6 +187,19 @@ public class MenuController : MonoBehaviour
             tutorialManager.SetActive(true);
             tutorialIsOpen = true;
         }
+
+        #if UNITY_IOS
+            // check with iOS to see if the user has accepted or declined tracking
+            var status = ATTrackingStatusBinding.GetAuthorizationTrackingStatus();
+
+            if (status == ATTrackingStatusBinding.AuthorizationTrackingStatus.NOT_DETERMINED)
+            {
+                Debug.Log("Unity iOS Support: Displaying popup.");
+                ATTrackingStatusBinding.RequestAuthorizationTracking();
+            }
+        #else
+            Debug.Log("Unity iOS Support: App Tracking Transparency status not checked, because the platform is not iOS.");
+        #endif
     }
 
 
@@ -269,9 +294,9 @@ public class MenuController : MonoBehaviour
                     {
                         //not clicking buttons
                         //touch is in pixels!!!
-                        float percent = (canvasSize.y + soundButtonRect.anchoredPosition.y - 3 * (soundButtonRect.rect.height / 2) / 2) / canvasSize.y;
-                        float pixelValue = Screen.height * percent;
-                        if (lastTouchPos.y < pixelValue)
+                        float percentUp = (canvasSize.y + soundButtonRect.anchoredPosition.y - 3 * (soundButtonRect.rect.height / 2) / 2) / canvasSize.y;
+                        float pixelValueUp = Screen.height * percentUp;
+                        if (lastTouchPos.y < pixelValueUp && lastTouchPos.y > supportRect.anchoredPosition.y + 40)
                         {
                             PlayerPrefs.SetInt("addScore", 0);
                             SceneManager.LoadScene("Game");
@@ -296,6 +321,7 @@ public class MenuController : MonoBehaviour
             infoImageC.sprite = quitSprite;
 
             tapGroup.SetActive(false);
+            supportGO.SetActive(false);
             shopGO.SetActive(true);
             coinsGO.SetActive(true);
             soundButtonGO.SetActive(false);
@@ -319,6 +345,7 @@ public class MenuController : MonoBehaviour
                 infoImageC.sprite = tutorialSprite;
                 soundButtonGO.SetActive(true);
                 tapGroup.SetActive(true);
+                supportGO.SetActive(true);
                 shopGO.SetActive(false);
                 coinsGO.SetActive(false);
                 tutorialManager.SetActive(false);
@@ -363,6 +390,21 @@ public class MenuController : MonoBehaviour
             audioSource.Play();
             tutorialManager.SetActive(false);
             tutorialIsOpen = false;
+        }
+    }
+
+    void Support()
+    {
+        DateTime campaignEnd = System.DateTime.Parse("09/25/2021");
+        DateTime now = System.DateTime.Now;
+
+        if (now.Date < campaignEnd.Date)
+        {
+            Application.OpenURL("https://bit.ly/gravity-kickstarter");
+        }
+        else
+        {
+            Application.OpenURL("https://bit.ly/3C7fqcU");
         }
     }
 

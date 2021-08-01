@@ -75,6 +75,7 @@ TagManager:
   - Wadow
   - Xagobah
   - CoinInfo
+  - Support
   layers:
   - Default
   - TransparentFX
