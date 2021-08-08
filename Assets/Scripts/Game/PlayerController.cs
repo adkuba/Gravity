@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private float orbitTime = 0;
     private float fromLastBoost;
     public float fuelTank = 400f;
+    public float maxRotate = 45.0f;
     private bool exiting;
     private float score = 0;
     private int highscore;
@@ -358,7 +359,7 @@ public class PlayerController : MonoBehaviour
             transform.rotation = rotation;
         }
 
-
+        float rotateOffset = 2.0f;
         //steering, deltaTime is important!
         if (usedFuel < fuelTank && Time.time - timeFromSpawn > 1 && Input.touchCount > 0) //
         {
@@ -390,14 +391,25 @@ public class PlayerController : MonoBehaviour
             else if (pos.x > Screen.width / 2)
             {
                 targetForceSteer += new Vector3(90 * Time.deltaTime + steerAddition, 0, 0);
-                shell.transform.Rotate(new Vector3(0, 0, -1) * 90 * Time.deltaTime);
+
+                // spaceship rotation
+                if (shell.transform.localRotation.eulerAngles.y > 360.0f - maxRotate + rotateOffset || shell.transform.localRotation.eulerAngles.y < maxRotate)
+                {
+                    shell.transform.Rotate(new Vector3(0, 0, -1) * 90 * Time.deltaTime);
+                }
             }
             else if (pos.x < Screen.width / 2)
             {
                 targetForceSteer += new Vector3(-90 * Time.deltaTime - steerAddition, 0, 0); 
-                shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);
+
+                // spaceship rotation
+                if (shell.transform.localRotation.eulerAngles.y < maxRotate - rotateOffset || shell.transform.localRotation.eulerAngles.y > 360.0f - maxRotate)
+                {
+                    shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);
+                }
             }
             
+            //desktop steering
             /*
             if (Input.GetKey(KeyCode.RightArrow)){
                 targetForceSteer += new Vector3(90 * Time.deltaTime + steerAddition, 0, 0);
@@ -416,6 +428,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            // spaceship rotation back
             if (shell.transform.localRotation.eulerAngles.y < 358 && shell.transform.localRotation.eulerAngles.y > 180)
             {
                 shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);

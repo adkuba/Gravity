@@ -17,6 +17,7 @@ public class MenuController : MonoBehaviour
     private bool infoIsOpen = false;
     private bool tutorialIsOpen = false;
     private bool textUp = false;
+    private bool canPlayAnimation = true;
     private bool count = false;
     private int coins = 0;
     private bool textDown = false;
@@ -220,7 +221,7 @@ public class MenuController : MonoBehaviour
         }
 
         //highscore animation
-        if (PlayerPrefs.GetInt("highscoreChanged", 0) == 1)
+        if (PlayerPrefs.GetInt("highscoreChanged", 0) == 1 && canPlayAnimation)
         {
             if (!textUp && Time.time - animWait > 1)
             {
@@ -289,11 +290,18 @@ public class MenuController : MonoBehaviour
             audioSource.clip = select;
             audioSource.Play();
             playerXMove = -120.0f;
-            highscoreText.text = "Tutorial";
             infoButtonText.text = quitText;
             scoreImageC.sprite = tutorialSprite;
             infoButtonText.text = quitText;
             infoImageC.sprite = quitSprite;
+
+            textUp = false;
+            animWait = 0;
+            textDown = false;
+            count = false;
+            canPlayAnimation = false;
+            highscoreText.fontSize = 22;
+            highscoreText.text = "Tutorial";
 
             tapGroup.SetActive(false);
             supportGO.SetActive(false);
@@ -314,6 +322,7 @@ public class MenuController : MonoBehaviour
             else
             {
                 playerXMove = 120.0f;
+                canPlayAnimation = true;
                 highscoreText.text = highscore.ToString();
                 scoreImageC.sprite = scoreSprite;
                 infoButtonText.text = moreText;

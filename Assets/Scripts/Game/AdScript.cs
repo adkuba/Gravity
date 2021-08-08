@@ -79,6 +79,7 @@ public class AdScript : MonoBehaviour, IUnityAdsListener
     {
         if (Advertisement.IsReady(myPlacementId))
         {
+            PlayerPrefs.SetInt("canPlayMusic", 0);
             Advertisement.Show(myPlacementId);
         }
     }
@@ -113,6 +114,7 @@ public class AdScript : MonoBehaviour, IUnityAdsListener
         {
             Debug.LogWarning("The ad did not finish due to an error.");
         }
+        PlayerPrefs.SetInt("canPlayMusic", 1);
     }
 
     public void OnUnityAdsDidError(string message)

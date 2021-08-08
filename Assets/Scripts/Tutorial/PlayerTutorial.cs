@@ -70,6 +70,7 @@ public class PlayerTutorial : MonoBehaviour
     private string finalTutText = "Great that's it!";
 
     public GameObject planetPrefab;
+    public float maxRotate = 45.0f;
 
 
     void Start()
@@ -391,7 +392,7 @@ public class PlayerTutorial : MonoBehaviour
             transform.rotation = rotation;
         }
 
-
+        float rotateOffset = 2.0f;
         //steering, deltaTime is important!
         if (usedFuel < fuelTank && Time.time - timeFromSpawn > 1 && Input.touchCount > 0)
         {
@@ -431,7 +432,12 @@ public class PlayerTutorial : MonoBehaviour
                 {
                     rightTut = true;
                     targetForceSteer += new Vector3(90 * Time.deltaTime + steerAddition, 0, 0);
-                    shell.transform.Rotate(new Vector3(0, 0, -1) * 90 * Time.deltaTime);
+
+                    // spaceship rotation
+                    if (shell.transform.localRotation.eulerAngles.y > 360.0f - maxRotate + rotateOffset || shell.transform.localRotation.eulerAngles.y < maxRotate)
+                    {
+                        shell.transform.Rotate(new Vector3(0, 0, -1) * 90 * Time.deltaTime);
+                    }
                 }
             }
             else if (pos.x < Screen.width / 2)
@@ -443,7 +449,12 @@ public class PlayerTutorial : MonoBehaviour
                 }
 
                 targetForceSteer += new Vector3(-90 * Time.deltaTime - steerAddition, 0, 0);
-                shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);
+                
+                // spaceship rotation
+                if (shell.transform.localRotation.eulerAngles.y < maxRotate - rotateOffset || shell.transform.localRotation.eulerAngles.y > 360.0f - maxRotate)
+                {
+                    shell.transform.Rotate(new Vector3(0, 0, 1) * 90 * Time.deltaTime);
+                }
             }
         }
         else
