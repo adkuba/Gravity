@@ -69,3 +69,9 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Mac Files
+.DS_Store
+
+# Remove planets package - too big
+Assets/Exo-planets\ -\ NovaShade/
