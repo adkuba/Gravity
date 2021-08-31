@@ -14,7 +14,7 @@
 
 
 # Important
-To work with this repository you need to download [Exo-planets - NovaShade]() package and place it in Assets folder with the same name - see meta file.
+To work with this repository you need to download [Exo-planets - NovaShade](https://drive.google.com/file/d/1G9I9k_SfGuG0CNknTavh_YEG9Nqpjpen/view?usp=sharing) package and place it in Assets folder with the same name - see meta file.
 
 
 
